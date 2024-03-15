@@ -10,7 +10,7 @@
     nix.gc = {
         dates = "weekly";
         automatic = true;
-        options = "--delete-generations +3"
+        options = "--delete-generations +3";
     };
 
     services.xserver = {
