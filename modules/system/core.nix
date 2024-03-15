@@ -29,7 +29,7 @@
         LC_TIME = "en_US.UTF-8";
   };
 
-    network = {
+    networking = {
         networkmanager.enable = true; 
     };
 
