@@ -1,4 +1,4 @@
-{ pkgs, lib, ... }:
+{ config, pkgs, lib, ... }:
 
 {
 environment.systemPackages = with pkgs; [
@@ -9,5 +9,11 @@ xfce.thunar
 vscode
 wofi
 ];
+
+programs = {
+
+    steam.enable = true
+    
+}
 
 }
