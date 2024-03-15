@@ -1,6 +1,9 @@
 { config, pkgs, lib, ... }:
 {
 
-    programs.steam.enable
-    
+    programs = {
+    steam.enable = true;
+  };
+
+
 }
