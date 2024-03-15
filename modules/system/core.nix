@@ -13,6 +13,11 @@
         options = "--delete-generations +3"
     };
 
+    services.xserver = {
+    layout = "us";
+    xkbVariant = "";
+    };
+
     nix.settings = {
     auto-optimise-store = true;
     experimental-features = [ "nix-command" "flakes" ];
