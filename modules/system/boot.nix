@@ -4,7 +4,7 @@
     boot = {
         loader = {
             systemd-boot.enable = true;
-            timeout = 0
+            timeout = 0;
         };
          initrd.verbose = false;
          kernelPackages = pkgs.linuxPackages_zen;
