@@ -14,7 +14,7 @@
     };
 
     services.xserver = {
-    layout = "us";
+    xkb.layout = "us";
     };
 
     nix.settings = {
