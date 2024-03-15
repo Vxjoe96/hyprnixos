@@ -11,7 +11,6 @@ wofi
 dunst
 libnotify
 pulsemixer
-la
 (colloid-gtk-theme.override {
    themeVariants = "grey";
    colorVariants = "dark";
