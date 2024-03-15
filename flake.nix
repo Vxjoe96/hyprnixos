@@ -11,6 +11,7 @@
       system = "x86_64-linux";
       specialArgs = { inherit inputs; };
       modules = [
+        ./hosts/desktop.nix
         ./modules/system/core.nix
         ./modules/gui/core.nix
         ./modules/gaming.nix
