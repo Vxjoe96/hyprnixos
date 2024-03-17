@@ -1,117 +1,127 @@
-# Edit this configuration file to define what should be installed on
-# your system.  Help is available in the configuration.nix(5) man page
-# and in the NixOS manual (accessible by running ‘nixos-help’).
-
-{ inputs, pkgs, ... }:
-
+{ config, pkgs, lib, ... }:
 {
-  imports =
-    [ # Include the results of the hardware scan.
-      ./hardware-configuration.nix
-	    ./apps.nix
+
+imports = [
+        ./hardware-configuration.nix
+        ./pkgs.nix
     ];
-  
-  #Hyprland
-  programs.hyprland = {
-    enable = true;
-    package = inputs.hyprland.packages.${pkgs.system}.hyprland;
+
+
+##Boot
+
+boot = {
+  loader = {
+    systemd-boot.enable = true;
+      timeout = 0;
   };
+   initrd.verbose = false;
+   kernelPackages = pkgs.linuxPackages_zen;
+   kernelParams = [ "fastboot" "quiet" "splash" "udev.log_level=3"];
+   consoleLogLevel = 0;
 
-
-  nix.settings = {
-    substituters = ["https://hyprland.cachix.org"];
-    trusted-public-keys = ["hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="];
-  };
-
-  
-  #enable flakes
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
-	
-
-  # Bootloader.
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
-
-  networking.hostName = "Gaming-Desktop"; # Define your hostname.
-  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
-
-  # Configure network proxy if necessary
-  # networking.proxy.default = "http://user:password@proxy:port/";
-  # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
-
-
-
-  security.rtkit.enable = true;
-services.pipewire = {
-  enable = true;
-  alsa.enable = true;
-  alsa.support32Bit = true;
-  pulse.enable = true;
-  # If you want to use JACK applications, uncomment this
-  #jack.enable = true;
 };
 
-  # Enable networking
-  networking.networkmanager.enable = true;
-  
-  # Set your time zone.
-  time.timeZone = "America/Denver";
+systemd.services = {
+  NetworkManager-wait-online.enable = false;
+  systemd-udev-settle.enable = false;
+};
 
-  # Select internationalisation properties.
-  i18n.defaultLocale = "en_US.UTF-8";
 
-  i18n.extraLocaleSettings = {
-    LC_ADDRESS = "en_US.UTF-8";
-    LC_IDENTIFICATION = "en_US.UTF-8";
-    LC_MEASUREMENT = "en_US.UTF-8";
-    LC_MONETARY = "en_US.UTF-8";
-    LC_NAME = "en_US.UTF-8";
-    LC_NUMERIC = "en_US.UTF-8";
-    LC_PAPER = "en_US.UTF-8";
-    LC_TELEPHONE = "en_US.UTF-8";
-    LC_TIME = "en_US.UTF-8";
+##Nixos Flake/Settings
+
+nix.settings = {
+    auto-optimise-store = true;
+    experimental-features = [ "nix-command" "flakes" ];
+    };
+
+nix.gc = {
+        dates = "weekly";
+        automatic = true;
+        options = "--delete-generations +3";
+    };
+
+nixpkgs.config.allowUnfree = true;
+
+system.stateVersion = "unstable";
+
+
+##User
+
+    users.users.joseph = {
+        isNormalUser = true;
+        description = "joseph";
+        extraGroups = [ "networkmanager" "wheel" ];
   };
 
-  # Configure keymap in X11
-  services.xserver = {
-    layout = "us";
-    xkbVariant = "";
+##Audio##
+
+security.rtkit.enable = true;
+    services.pipewire = {
+    enable = true;
+    alsa.enable = true;
+    alsa.support32Bit = true;
+    pulse.enable = true;
+    wireplumber.enable = true;
+    };
+
+##Networking
+
+networking = {
+        networkmanager.enable = true; 
+    };
+
+
+##Time settings
+
+ time.timeZone = "America/Denver";
+    i18n.defaultLocale = "en_US.UTF-8";
+    i18n.extraLocaleSettings = {
+        LC_ADDRESS = "en_US.UTF-8";
+        LC_IDENTIFICATION = "en_US.UTF-8";
+        LC_MEASUREMENT = "en_US.UTF-8";
+        LC_MONETARY = "en_US.UTF-8";
+        LC_NAME = "en_US.UTF-8";
+        LC_NUMERIC = "en_US.UTF-8";
+        LC_PAPER = "en_US.UTF-8";
+        LC_TELEPHONE = "en_US.UTF-8";
+        LC_TIME = "en_US.UTF-8";
   };
 
-  # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.users.joseph = {
-    isNormalUser = true;
-    description = "joseph";
-    extraGroups = [ "networkmanager" "wheel" ];
-    packages = with pkgs; [kitty];
-  };
 
-  # Allow unfree packages
-  nixpkgs.config.allowUnfree = true;
+##Hyprland
 
-  # List packages installed in system profile. To search, run:
-  # $ nix search wget
-  
+programs.hyprland.enable = true;
 
- 
+xdg.portal = {
+    enable = true;
+    extraPortals = with pkgs; [
+      xdg-desktop-portal-hyprland
+    ];
+};
 
-  # List services that you want to enable:
 
-  # Enable the OpenSSH daemon.
-  services.openssh.enable = true;
+##fonts
 
-  # Open ports in the firewall.
-  networking.firewall.allowedTCPPorts = [ 22 ];
-  # networking.firewall.allowedUDPPorts = [ ... ];
-  # Or disable the firewall altogether.
-  networking.firewall.enable = true;
+fonts.packages = with pkgs; [
+    (nerdfonts.override { fonts = [ "JetBrainsMono" ]; })
+  ];
 
-  # This value determines the NixOS release from which the default
-  # settings for stateful data, like file locations and database versions
-  # on your system were taken. It‘s perfectly fine and recommended to leave
-  # this value at the release version of the first install of this system.
-  # Before changing this value read the documentation for this option
-  # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
-  system.stateVersion = "23.11"; # Did you read the comment?
+
+##Gaming
+
+programs.steam.enable = true;
+
+hardware.opengl = {
+    enable = true;
+    driSupport = true;
+    driSupport32Bit = true;
+};
+
+
+
+
+
+
+
 
 }

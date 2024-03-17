@@ -1,19 +1,20 @@
 { config, pkgs, lib, ... }:
 
 {
+
 environment.systemPackages = with pkgs; [
 
+hyprpaper
+hypridle
+hyprlock
 kitty
-firefox
-xfce.thunar
-vscode
 wofi
+dunst
+libnotify
+pulsemixer
+git
+firefox
+
 ];
-
-programs = {
-
-    steam.enable = true
-    
-}
 
 }
