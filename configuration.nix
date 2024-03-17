@@ -69,7 +69,7 @@ security.rtkit.enable = true;
 networking = {
         networkmanager.enable = true; 
     };
-
+services.openssh.enable = true;
 
 ##Time settings
 
