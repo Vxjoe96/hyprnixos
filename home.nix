@@ -3,7 +3,7 @@
 let
   colloid_name = "Colloid-Grey-Black-Rimless";
   colloid = pkgs.colloid-gtk-theme.override {
-    themeVariants = [ "Grey" ];
+    themeVariants = [ "grey" ];
     tweaks = [ "rimless" "black" ];
     colorVariants = "dark";
   };
