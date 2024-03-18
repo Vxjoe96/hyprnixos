@@ -23,7 +23,9 @@ gtk = {
     platformTheme = "gtk";
   };
   
-  
+  home.packages = with pkgs; [
+    xfce.thunar
+  ];
   
   # TODO please change the username & home directory to your own
   home.username = "joseph";
