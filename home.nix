@@ -1,11 +1,11 @@
 { config, pkgs, ... }:
 
 let
-  colloid_name = "Colloid-gtk-theme";
+  colloid_name = "Colloid";
   colloid = pkgs.colloid-gtk-theme.override {
     themeVariants = [ "grey" ];
     tweaks = [ "rimless" "black" ];
-    colorVariants = [ "dark" ];
+    
   };
 in
 {
