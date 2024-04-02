@@ -15,8 +15,8 @@
     theme = {
        name = "Colloid-Dark";
        package = pkgs.colloid-gtk-theme.override {
-         themeVariants = ["grey"]
-         colorVariants = ["dark"]
+         themeVariants = ["grey"];
+         colorVariants = ["dark"];
          tweaks = ["rimless" "black" "float"];
        };
     };
