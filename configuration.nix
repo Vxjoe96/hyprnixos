@@ -4,7 +4,6 @@
 imports = [
         ./hardware-configuration.nix
         ./pkgs.nix
-        ./home.nix
     ];
 
 

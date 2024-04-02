@@ -4,51 +4,43 @@
   config,
   ...
 }: {
-  home.pointerCursor = {
-    package = pkgs.bibata-cursors;
-    name = "Bibata-Original-Classic";
-    size = 16;
-    gtk.enable = true;
-    x11.enable = true;
-  };
-
   gtk = {
     enable = true;
-    font = {
-      name = "AestheticIosevka Nerd Font";
-      size = 9;
-    };
-
-    gtk2.configLocation = "${config.xdg.configHome}/gtk-2.0/gtkrc";
 
     iconTheme = {
-      name = "WhiteSur";
-      package = pkgs.whitesur-icon-theme;
+      name = "Papirus-Dark";
+      package = pkgs.papirus-icon-theme;
     };
 
     theme = {
        name = "Colloid-Dark";
        package = pkgs.colloid-gtk-theme.override {
+         themeVariants = ["grey"]
+         colorVariants = ["dark"]
          tweaks = ["rimless" "black" "float"];
        };
+    };
+
+    cursorTheme = {
+      name = "Quintom_Ink";
+      package = pkgs.quintom-cursor-theme;
+    };
 
     gtk3.extraConfig = {
-      gtk-xft-antialias = 1;
-      gtk-xft-hinting = 1;
-      gtk-xft-hintstyle = "hintslight";
-      gtk-xft-rgba = "rgb";
-      gtk-application-prefer-dark-theme = 1;
+      Settings = ''
+        gtk-application-prefer-dark-theme=1
+      '';
     };
-    gtk2.extraConfig = ''
-      gtk-xft-antialias=1
-      gtk-xft-hinting=1
-      gtk-xft-hintstyle="hintslight"
-      gtk-xft-rgba="rgb"
-    '';
 
-    gtk4.extraConfig = {gtk-application-prefer-dark-theme = 1;};
+    gtk4.extraConfig = {
+      Settings = ''
+        gtk-application-prefer-dark-theme=1
+      '';
+    };
   };
-  
+
+  home.sessionVariables.GTK_THEME = "Colloid-Dark";
+    
   # TODO please change the username & home directory to your own
   home.username = "joseph";
   home.homeDirectory = "/home/joseph";
